@@ -18,7 +18,7 @@ An array of any combination of VNodes, VText, Widgets, or Thunks
 **key** *(optional)* 
 An identifying string used to differentiate this node from others. Used internally by vtree/diff to do node reordering.
 
-**namespace** *(optional*) A string specifying the namespace uri to associate with the element. VNodes created with a namespace will use [Document.createElementNS](https://developer.mozilla.org/en-US/docs/Web/API/document.createElementNS)
+**namespace** *(optional*) A string specifying the namespace uri to associate with the element. VNodes created with a namespace will use [Document#createElementNS](https://developer.mozilla.org/en-US/docs/Web/API/document.createElementNS)
 
 ### A full example
 ```javascript
@@ -56,7 +56,7 @@ document.body.appendChild(RedBoxElem)
 ### properties
 Keys in properties have several special cases. 
 #### properties.attributes
-Everything in the `properties.attributes` object will be set on the rendered dom node using `Element.setAttribute(key, value)`, and removed using `Element.removeAttribute`. Refer to [MDN HTML Attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes) for available attributes. 
+Everything in the `properties.attributes` object will be set on the rendered dom node using `Element#setAttribute(key, value)`, and removed using `Element#removeAttribute`. Refer to [MDN HTML Attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes) for available attributes. 
 
 #### Hook Objects
 Any key whose value is an object with an inherited key called "hook" is considered a hook. Hooks are used to run functions at render time. Refer the the [hook documentation](https://github.com/littleloops/virtual-dom-docs-wip/blob/master/README.md) for more information.
@@ -70,7 +70,7 @@ createElement(new VNode('div', { style: { width: "100px", height: "100px"}}))
 ```
 
 #### Other Values
-Most attributes can be set using properties. During element creation, keys and values in the `properties.attributes` get set using `Element.setAttribute(key, value)`, whereas keys other than `attributes` present in properties get set using `Element[key] = value`.
+Most attributes can be set using properties. During element creation, keys and values in the `properties.attributes` get set using `Element#setAttribute(key, value)`, whereas keys other than `attributes` present in properties get set using `Element[key] = value`.
 
 ```javascript
 foo = new VNode('div', { id: 'foo'})
