@@ -59,7 +59,7 @@ Keys in properties have several special cases.
 Everything in the `properties.attributes` object will be set on the rendered dom node using `Element#setAttribute(key, value)`, and removed using `Element#removeAttribute`. Refer to [MDN HTML Attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes) for available attributes. 
 
 #### Hook Objects
-Any key whose value is an object with an inherited key called "hook" is considered a hook. Hooks are used to run functions at render time. Refer the the [hook documentation](https://github.com/littleloops/virtual-dom-docs-wip/blob/master/README.md) for more information.
+Any key whose value is an object with an inherited key called "hook" is considered a hook. Hooks are used to run functions at render time. Refer to the [hook documentation](https://github.com/littleloops/virtual-dom-docs-wip/blob/master/README.md) for more information.
 
 #### Other Objects
 Any key in `properties` that is an object, but whose value isn't a hook and isn't in the attributes key, will set the rendered elements property to the given object.
@@ -70,7 +70,7 @@ createElement(new VNode('div', { style: { width: "100px", height: "100px"}}))
 ```
 
 #### Other Values
-Most attributes can be set using properties. During element creation, keys and values in the `properties.attributes` get set using `Element#setAttribute(key, value)`, whereas keys other than `attributes` present in properties get set using `Element[key] = value`.
+Most attributes can be set using properties. During element creation, keys and values in the `properties.attributes` get set using `Element#setAttribute(key, value)`, whereas keys other than `attributes` present in properties get set using `element[key] = value`.
 
 ```javascript
 foo = new VNode('div', { id: 'foo'})
@@ -78,7 +78,9 @@ foo = new VNode('div', { id: 'foo'})
 foo = new VNode('div', { attributes: { id: 'foo' }})
 ```
 
-This can, however, cause some unexpected behavior. We have documented some common differences below.
+This can, however, cause some unexpected behavior, particularly if you are unfamiliar with the differences between setting an element property directly vs. setting it using an attribute. Refer to [Element](https://developer.mozilla.org/en-US/docs/Web/API/Element) and [HTMLElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement) for some common property behaviors.
+
+We have documented some of the differences below.
 
 #### properties.style vs properties.attributes.style
 `properties.style` expects an object, while `properties.attributes.style` expects a string.
@@ -90,29 +92,41 @@ redBox = new VNode('div', { attributes: { style: "width: 100px; height: 100px; b
 anotherRedBox = new VNode('div', { style: { width: "100px", height: "100px", backgroundColor: "#FF0000" }})
 ```
 
+When using `properties.style`, if the styles have changed since the last render and are being updated, keys that are not in the new style definition will be set to an empty string. This differs from the normal behavior, which sets old object keys to undefined.
+
 #### properties.className vs properties.attributes.class
 Set the class attribute value using `className` key in properties, and the `class` key in attributes.
 
 ```javascript
 redBox = new VNode('div', { className: "red box" })
 // will render the same as
-anotherRedBox = new VNode('div', { attributes: { "class": "red box" } })
+anotherRedBox = new VNode('div', { attributes: { "class": "red box" }})
 ```
 
 #### Custom attributes (data-\*)
 Custom attributes won't be rendered if set directly in properties. Set them in properties.attributes.
 
 ```javascript
-doThis = new VNode('div', { attributes: { "data-example": "I will render" } })
+doThis = new VNode('div', { attributes: { "data-example": "I will render" }})
 notThis = new VNode('div', { "data-example": "I will not render" })
 ```
 
-#### ARIA attributes
-Like custom attributes, ARIA attributes also must be set in `properties.attributes`.
+Alternately, you can use the [dataset](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement.dataset) property to set data-\* attributes.
 
 ```javascript
-ariaExample = new VNode('div', { attributes: { "aria-checked": "true" } })
+new VNode('div', { attributes: { "data-greeting": "Hello" }})
+new VNode('div', { dataset: { greeting: "Hello" }})
+// Will both generate <div data-greeting="Hello"></div>
 ```
+
+#### ARIA attributes
+Like custom attributes, ARIA attributes are also set in `properties.attributes`.
+
+```javascript
+ariaExample = new VNode('div', { attributes: { "aria-checked": "true" }})
+```
+
+Unlike data-\* attributes, they cannot be set directly via properties.
 
 #### properties.value, properties.defaultValue, and properties.attributes.value
 If an input element is reset, its value will be returned to its value set in `properties.attributes.value`. If you've set the value using `properties.value`, this will not happen. However, you may set `properties.defaultValue` to get the desired result.
