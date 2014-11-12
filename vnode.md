@@ -87,9 +87,9 @@ We have documented some of the differences below.
 
 ```javascript
 // using attributes
-redBox = new VNode('div', { attributes: { style: "width: 100px; height: 100px; background-color: #FF0000;" }})
+var redBox = new VNode('div', { attributes: { style: "width: 100px; height: 100px; background-color: #FF0000;" }})
 // using a property
-anotherRedBox = new VNode('div', { style: { width: "100px", height: "100px", backgroundColor: "#FF0000" }})
+var anotherRedBox = new VNode('div', { style: { width: "100px", height: "100px", backgroundColor: "#FF0000" }})
 ```
 
 When using `properties.style`, if the styles have changed since the last render and are being updated, keys that are not in the new style definition will be set to an empty string. This differs from the normal behavior, which sets old object keys to undefined.
@@ -98,17 +98,17 @@ When using `properties.style`, if the styles have changed since the last render 
 Set the class attribute value using `className` key in properties, and the `class` key in attributes.
 
 ```javascript
-redBox = new VNode('div', { className: "red box" })
+var redBox = new VNode('div', { className: "red box" })
 // will render the same as
-anotherRedBox = new VNode('div', { attributes: { "class": "red box" }})
+var anotherRedBox = new VNode('div', { attributes: { "class": "red box" }})
 ```
 
 #### Custom attributes (data-\*)
 Custom attributes won't be rendered if set directly in properties. Set them in properties.attributes.
 
 ```javascript
-doThis = new VNode('div', { attributes: { "data-example": "I will render" }})
-notThis = new VNode('div', { "data-example": "I will not render" })
+var doThis = new VNode('div', { attributes: { "data-example": "I will render" }})
+var notThis = new VNode('div', { "data-example": "I will not render" })
 ```
 
 Alternately, you can use the [dataset](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement.dataset) property to set data-\* attributes.
@@ -123,7 +123,7 @@ new VNode('div', { dataset: { greeting: "Hello" }})
 Like custom attributes, ARIA attributes are also set in `properties.attributes`.
 
 ```javascript
-ariaExample = new VNode('div', { attributes: { "aria-checked": "true" }})
+var ariaExample = new VNode('div', { attributes: { "aria-checked": "true" }})
 ```
 
 Unlike data-\* attributes, they cannot be set directly via properties.
