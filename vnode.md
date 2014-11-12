@@ -80,7 +80,7 @@ foo = new VNode('div', { attributes: { id: 'foo' }})
 
 This can, however, cause some unexpected behavior. We have documented some common differences below.
 
-### properties.style vs properties.attributes.style
+#### properties.style vs properties.attributes.style
 `properties.style` expects an object, while `properties.attributes.style` expects a string.
 
 ```javascript
@@ -90,7 +90,7 @@ redBox = new VNode('div', { attributes: { style: "width: 100px; height: 100px; b
 anotherRedBox = new VNode('div', { style: { width: "100px", height: "100px", backgroundColor: "#FF0000" }})
 ```
 
-### properties.className vs properties.attributes.class
+#### properties.className vs properties.attributes.class
 Set the class attribute value using `className` key in properties, and the `class` key in attributes.
 
 ```javascript
@@ -99,7 +99,7 @@ redBox = new VNode('div', { className: "red box" })
 anotherRedBox = new VNode('div', { attributes: { "class": "red box" } })
 ```
 
-### Custom attributes (data-\*)
+#### Custom attributes (data-\*)
 Custom attributes won't be rendered if set directly in properties. Set them in properties.attributes.
 
 ```javascript
@@ -107,12 +107,12 @@ doThis = new VNode('div', { attributes: { "data-example": "I will render" } })
 notThis = new VNode('div', { "data-example": "I will not render" })
 ```
 
-### ARIA attributes
+#### ARIA attributes
 Like custom attributes, ARIA attributes also must be set in `properties.attributes`.
 
 ```javascript
 ariaExample = new VNode('div', { attributes: { "aria-checked": "true" } })
 ```
 
-### properties.value, properties.defaultValue, and properties.attributes.value
+#### properties.value, properties.defaultValue, and properties.attributes.value
 If an input element is reset, its value will be returned to its value set in `properties.attributes.value`. If you've set the value using `properties.value`, this will not happen. However, you may set `properties.defaultValue` to get the desired result.
