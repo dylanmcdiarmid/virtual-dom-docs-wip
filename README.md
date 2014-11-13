@@ -5,3 +5,5 @@ virtual-dom documentation WIP
 [VText](https://github.com/littleloops/virtual-dom-docs-wip/blob/master/vtext.md)
 
 [Hooks](https://github.com/littleloops/virtual-dom-docs-wip/blob/master/hooks.md)
+
+[Thunk](https://github.com/littleloops/virtual-dom-docs-wip/blob/master/thunk.md)
