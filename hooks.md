@@ -24,8 +24,8 @@ The Element generated from the VNode.
 
 ```javascript
 var Hook = function(){}
-Hook.prototype.hook = function(elem, propertyName, previousValue) {
-  console.log("type: ", elem.constructor.name)
+Hook.prototype.hook = function(node, propertyName, previousValue) {
+  console.log("type: ", node.constructor.name)
 }
 createElement(new VNode('div', { "my-hook": new Hook() }))
 // logs "type: HTMLDivElement"
