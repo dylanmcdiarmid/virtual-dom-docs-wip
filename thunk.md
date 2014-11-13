@@ -100,7 +100,7 @@ document.body.appendChild(rootNode)
 setTimeout(function() { 
     // Here we change the surrounding container, but the Thunk will stay the same. 
     // And because state.bg hasn't changed, none of the Book Table's children (such as the table rows) 
-    // will be compared against each other. diff will see that 
+    // will be compared against each other.
     var changedContainer = new VNode("div", 
       { id: "container", style: { border: "2px solid black", width: "300px" }}, 
       [getBookTableThunk(state.bg)])
