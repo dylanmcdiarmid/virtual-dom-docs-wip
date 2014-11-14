@@ -1,5 +1,5 @@
 # Thunk
-Thunks allow the user to take control of the diff'ing process for a specific dom tree, usually to avoid doing calculations you know are unneeded, such as diff'ing a tree you know hasn't changed. Most Thunks will employ memoization of some sort.
+Thunks allow the user to take control of the diff'ing process for a specific dom tree, usually to avoid doing calculations you know are unneeded, such as diff'ing a tree you know hasn't changed.
 
 ## Thunk Interface
 A Thunk needs to be an object with two keys
