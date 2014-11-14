@@ -6,19 +6,20 @@ In virtual-dom, VNodes are turned from virtual nodes into real nodes with the cr
 
 ## Arguments
 
-**tagName**
+**tagName**  
 A string, e.g. 'div', 'span', 'article'
 
-**properties** *(optional)*
+**properties** *(optional)*  
 An object that maps property names to their values, e.g. `{ id: "foo", className: "bar" }`
 
-**children** *(optional)*
+**children** *(optional)*  
 An array of any combination of VNodes, VText, Widgets, or Thunks
 
-**key** *(optional)* 
+**key** *(optional)*  
 An identifying string used to differentiate this node from others. Used internally by vtree/diff to do node reordering.
 
-**namespace** *(optional*) A string specifying the namespace uri to associate with the element. VNodes created with a namespace will use [Document#createElementNS](https://developer.mozilla.org/en-US/docs/Web/API/document.createElementNS)
+**namespace** *(optional*)  
+A string specifying the namespace uri to associate with the element. VNodes created with a namespace will use [Document#createElementNS](https://developer.mozilla.org/en-US/docs/Web/API/document.createElementNS)
 
 ### A full example
 ```javascript

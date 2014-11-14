@@ -21,7 +21,8 @@ document.body.appendChild(myElem)
 ```
 
 ## Arguments
-**text** The string you would like the text node to contain.
+**text**  
+The string you would like the text node to contain.
 
 ## HTML Injection
 `document#createTextNode` will defend against HTML injection. If you do not want this behavior, you may use the innerHTML property of the parent VNode.

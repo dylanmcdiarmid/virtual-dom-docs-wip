@@ -19,7 +19,7 @@ createElement(new VNode('div', { "my-hook": hook }))
 ## Arguments
 Your hook function will be given the following arguments
 
-**node**
+**node**  
 The Element generated from the VNode.
 
 ```javascript
@@ -31,7 +31,7 @@ createElement(new VNode('div', { "my-hook": new Hook() }))
 // logs "type: HTMLDivElement"
 ```
 
-**propertyName**
+**propertyName**  
 String, key of the property this hook was assigned from.
 
 ```javascript
@@ -43,7 +43,7 @@ createElement(new VNode('div', { "my-hook": new Hook() }))
 // logs "name: my-hook"
 ```
 
-**previousValue** *(optional)*
+**previousValue** *(optional)*  
 If this node is having just its properties changed during a patch, it will receive the value that was previously assigned to the key. Otherwise, this argument will be undefined.
 
 ## Other Examples

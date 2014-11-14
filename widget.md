@@ -24,7 +24,7 @@ Widget.prototype.destroy = function(domNode){}
 ```
 
 ### Update Arguments
-The arguments passed to `Widget.update`
+The arguments passed to `Widget#update`
 
 **previous**  
 The previous Widget
@@ -33,7 +33,7 @@ The previous Widget
 The previous DOM Element associated with this widget
 
 ### Destroy Argument
-The argument passed to `Widget.destroy`
+The argument passed to `Widget#destroy`
 
 **domNode**  
 The HTMLElement associated with the widget that will be removed
