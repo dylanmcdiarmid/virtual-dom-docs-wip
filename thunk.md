@@ -13,7 +13,7 @@ Function that returns a VNode, Widget, or VText.
 ```javascript
 // Boilerplate Thunk
 var Thunk = function (){}
-Thunk.prototype.type = "Widget"
+Thunk.prototype.type = "Thunk"
 Thunk.prototype.render = function(previous){}
 ```
 
