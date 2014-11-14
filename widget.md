@@ -39,7 +39,7 @@ The argument passed to `Widget#destroy`
 The HTMLElement associated with the widget that will be removed
 
 ## Full Example
-This example demonstrates one way to pass local component state and use `init`, `update`, and `destroy` to create widget that counts each time it tries to update, only showing the odd numbers.
+This example demonstrates one way to pass local component state and use `init`, `update`, and `destroy` to create a widget that counts each time it tries to update, only showing the odd numbers.
 
 ```javascript
 diff = require("vtree/diff")
@@ -52,8 +52,14 @@ var OddCounterWidget = function() {}
 OddCounterWidget.prototype.type = "Widget"
 OddCounterWidget.prototype.count = 1
 OddCounterWidget.prototype.init = function() {
-  // You must return a DOM Element instead of a VNode, VText, or Widget
-  return createElement(new VNode("div", null, [new VText("Count is: " + this.count)]))
+  // With widgets, you can use any method you would like to generate the DOM Elements.
+  // We could get the same result using:
+  // createElement = require("vdom/create-element")
+  // return createElement(new VNode("div", null, [new VText("Count is: " + this.count)]))
+  var divElem = document.createElement("div")
+  var textElem = document.createTextNode("Count is: " + this.count)
+  divElem.appendChild(textElem)
+  return divElem
 }
 
 OddCounterWidget.prototype.update = function(previous, domNode) {
@@ -61,8 +67,8 @@ OddCounterWidget.prototype.update = function(previous, domNode) {
   // Only re-render if the current count is odd
   if (this.count % 2) {
     // When using widgets and updating, you are responsible for the relevant
-    // dom manipulation. The second argument passed to update is the
-    // last dom node associated with the widget.
+    // dom manipulation. The second argument passed to update is the previous
+    // dom node associated with the widget.
     var newNode = this.init()
     domNode.parentNode.replaceChild(newNode, domNode)
     return newNode
@@ -78,19 +84,21 @@ OddCounterWidget.prototype.destroy = function(domNode) {
 }
 
 var myCounter = new OddCounterWidget()
-var containerNode = new VNode("div", { id: "container" }, [myCounter])
+var containerNode = new VNode("div", null, [myCounter])
 var currentNode = containerNode
 var rootNode = createElement(currentNode)
 
-// A simple function to diff your thunks, and patch the dom
+// A simple function to diff your widgets, and patch the dom
 var update = function(nextNode) {
   var patches = diff(currentNode, nextNode)
   patch(rootNode, patches)
   currentNode = nextNode
 }
 
-document.body.appendChild(rootNode)
-setInterval(function(){
-  update(new VNode("div", { id: "container" }, [new OddCounterWidget()]))
-}, 1000)
+module.exports = function() {
+  document.body.appendChild(rootNode)
+  setInterval(function(){
+    update(new VNode("div", null, [new OddCounterWidget()]))
+  }, 1000)
+}
 ```
