@@ -10,24 +10,57 @@ must be the string "Thunk"
 **render**   
 Function that returns a VNode, Widget, or VText.
 
+```javascript
+// Boilerplate Thunk
+var Thunk = function (){}
+Thunk.prototype.type = "Widget"
+Thunk.prototype.render = function(previous){}
+```
+
 ## Render Method Arguments
 When diff is run, the render method is passed a single argument.
 
 **previous**  
 The previous VNode, Thunk, Widget, or VText that the Thunk is being diffed against
 
+## The Special "vnode" Property
+When `render` is called by `diff`, it will create a cache of whatever it returns in the key `vnode`. When implementing the Thunk interface, don't define a `vnode` key, as it will be overwritten! You should use the `vnode` property when render is provided with the `previous` argument, and you'd like to return the cached copy to prevent a Thunk from re-rendering. We give an example of this in the ConstantlyThunk implementation below.
+
 ## Simple Example
-As long as the Thunk object has the required interface, it will be treated as a Thunk. Here's an unchanging Thunk.
+Here we implement a simple Thunk called ConstantlyThunk. Any instance of ConstantlyThunk that gets diffed with another instance of ConstantlyThunk will return the value of the previous ConstantlyThunk, preventing a patch from being generated.
 
 ```javascript
-var exampleNode = new VNode("div", null, [new VText("I don't get diffed")])
-var unchangingThunk = { type: "Thunk", render: function(previous) { return exampleNode } }
+// Only the first instance of this Thunk will be shown. 
+// Once its been rendered, any other instances of ConstantlyThunk that
+// diff with it will return a reference to the cached value that is automatically
+// assigned to the "vnode" property
+var ConstantlyThunk = function(greeting){
+  this.greeting = greeting
+}
+ConstantlyThunk.prototype.type = "Thunk"
+ConstantlyThunk.prototype.render = function(previous) {
+  if (previous && previous.vnode) {
+    return previous.vnode
+  } else {
+    return new VNode('div', null, [new VText("Constantly "+ this.greeting)])
+  }
+}
+
+Thunk1 = new ConstantlyThunk("Thunk!")
+Thunk2 = new ConstantlyThunk("I won't be rendered!")
+thunkElem = createElement(Thunk1)
+document.body.appendChild(thunkElem)
+// No new patches are generated
+patches = diff(Thunk1, Thunk2)
+// Nothing will happen
+patch(thunkElem, patches)
+
 ```
 
-Whenever you diff `unchangingThunk` against any other Thunk whose render function returns a reference to `exampleNode`, diff will stop comparing when it sees both `Thunk.render` methods returned the same reference. We never waste time comparing the child VText.
-
 ## Full Example
-Let's explore how Thunks work by imagining a situation in which we have a static list of books and authors. The user can change the background color of the table, but otherwise the listing will stay the same.
+Here we implement GenericThunk, a simplified version of Raynos' [immutable-thunk](https://github.com/Raynos/vdom-thunk/blob/master/immutable-thunk.js)
+
+It takes a rendering function, a comparison function, and a state. When it's being diffed vs. another instance of GenericThunk, it will use the comparison function to look at the new state and old state, and decide if it's ok to update.
 
 ```javascript
 diff = require("vtree/diff")
@@ -35,109 +68,78 @@ patch = require("vdom/patch")
 VNode = require("vtree/vnode")
 VText = require("vtree/vtext")
 createElement = require("vdom/create-element")
-// The current UI state
-var state = {
-  bg: "#CCC"
+// Our GenericThunk will take 3 arguments
+// renderFn is the function that will generate the VNode
+// cmpFn is the function that will be used to compare state to see if an update is necessary.
+// returns true if the update should re-render, and false if it should use the previous render
+// state is a value that holds the information cmpFn will use to decide whether we should
+// update the Thunk or not
+var GenericThunk = function(renderFn, cmpFn, state) {
+  this.renderFn = renderFn
+  this.cmpFn = cmpFn
+  this.state = state
 }
 
-// Stores previous and memoized values
-var memos = {
-  bookTable: {}
-}
+GenericThunk.prototype.type = "Thunk"
 
-// For making td columns with a text node inside
-var makeColumn = function(text) {
-  var textNode = new VText(text)
-  return new VNode("td", { className: "col" }, [textNode])
-}
-
-// For making table rows with book title and author columns
-var makeBookRow = function(title, author) {
-  return new VNode("tr", { className: "listing" }, [makeColumn(title), makeColumn(author)])
-}
-
-// Add some books
-var rows = []
-rows.push(makeBookRow("Surface Detail", "Iain M. Banks"))
-rows.push(makeBookRow("The Quantum Thief", "Hannu Rajaniemi"))
-rows.push(makeBookRow("Lock In", "John Scalzi"))
-
-// For making the surrounding table
-var makeBookTable = function(bg) {
-  var bodyNode = new VNode('tbody', null, rows)
-  return new VNode('table', { style: { width: "300px", backgroundColor: bg }}, [bodyNode])
-}
-
-// getBookTableThunk memoizes and returns a Thunk object
-// Takes bg - the background color
-var getBookTableThunk = function(bg) {
-  if (!memos.bookTable[bg]) {
-    // Here we memoize the Thunk, so whenever the background color changes to a 
-    // color already shown, we won't need to build the VNode again
-    memos.bookTable[bg] = { type: "Thunk", render: function () { return makeBookTable.call(null, bg) } }
+GenericThunk.prototype.render = function(previous) {
+  // The first time the Thunk renders, there will be no previous state
+  var previousState = previous ? previous.state : null
+  // We run the comparison function to see if the state has changed enough
+  // for us to re-render. If it returns truthy, then we call the render
+  // function to give us a new VNode
+  if ((!previousState || !this.state) || this.cmpFn(previousState, this.state)) {
+    return this.renderFn(previous, this)
+  } else {
+    // vnode will be set automatically when a thunk has been created
+    // it contains the VNode, VText, Thunk, or Widget generated by
+    // our render function.
+    return previous.vnode
   }
-  return memos.bookTable[bg]
 }
+
+// The function we'll pass to GenericThunk to see if the color has changed
+// We return a true value if the colors are different
+var titleCompare = function(previousState, currentState) {
+  return previousState.color !== currentState.color
+}
+// The function that builds our title when we detect that
+// the color has changed
+var titleRender = function(previousThunk, currentThunk) {
+  var currentColor = currentThunk.state.color
+  return new VNode("h1", { style: {color: currentColor}}, [new VText("Hello, I'm a title colored " + currentColor)])
+}
+
+var GreenColoredThunk = new GenericThunk(titleRender, titleCompare, { color: "green"})
+var BlueColoredThunk = new GenericThunk(titleRender, titleCompare, { color: "blue"})
+
+var currentNode = GreenColoredThunk
+var rootNode = createElement(currentNode)
 
 // A simple function to diff your thunks, and patch the dom
 var update = function(nextNode) {
-  var patches = diff(memos.currentNode, nextNode)
-  patch(memos.rootNode, patches)
-  memos.currentNode = nextNode
+  var patches = diff(currentNode, nextNode)
+  patch(rootNode, patches)
+  currentNode = nextNode
 }
-
-// Create a div container around our Thunk
-// This will cause a memo to be created for the current state.bg value - #CCC
-containerNode = new VNode("div", { id: "container" }, [getBookTableThunk(state.bg)])
-
-var rootNode = createElement(containerNode)
-memos.currentNode = containerNode
-memos.rootNode = rootNode
 
 document.body.appendChild(rootNode)
-
-// Schedule some updates
-setTimeout(function() { 
-    // Here we change the surrounding container, but the Thunk will stay the same. 
-    // And because state.bg hasn't changed, none of the Book Table's children (such as the table rows) 
-    // will be compared against each other.
-    var changedContainer = new VNode("div", 
-      { id: "container", style: { border: "2px solid black", width: "300px" }}, 
-      [getBookTableThunk(state.bg)])
-
-    update(changedContainer)
-  }, 
+// We schedule a couple updates
+// Our first update will see that our color hasn't changed, and will stop comparing at that point,
+// instead returning a reference to GreenColoredThunk.vnode
+setTimeout(function() {
+    update(new GenericThunk(titleRender, titleCompare, { color: "green" }))
+  },
   1000)
 
-setTimeout(function() { 
-    // Now we change state.bg to a new value, our thunk will generate a new VNode, which
-    // will be patched as we would expect. Now the background color of the table will be
-    // white instead of grey.
-    state.bg = "#FFF"
-    var changedContainer = new VNode("div", 
-      { id: "container", style: { border: "2px solid red", width: "300px" }}, 
-      [getBookTableThunk(state.bg)])
-
-    update(changedContainer)
-  }, 
+// In our second update, BlueColoredThunk will see that state.color has changed,
+// and will return a new VNode, generating a patch
+setTimeout(function() {
+    update(BlueColoredThunk)
+  },
   2000)
-```
-
-### Thunks Inside Thunks
-Did you notice another bit of optimization we could do in the above code? The book list isn't changeable by state, so there is no reason to build it or diff it more than once. Fortunately, Thunks can be nested, so we can edit the `makeBookTable` function and memoize `bodyNode`.
-
-```javascript
-var makeBookTable = function(bg) {
-  if (!memos.bookBodyThunk) {
-    var bodyNode = new VNode('tbody', null, rows)
-    memos.bookBodyThunk = { type: "Thunk", render: function(previous) { return bodyNode } }
-  }
-  return new VNode('table', { style: { width: "300px", backgroundColor: bg }}, [memos.bookBodyThunk])
-}
 
 ```
-
-Now even when the parent thunk is re-rendered, diff won't waste time comparing all the table rows holding our static book information.
 
 ## Other Resources
 Raynos has created a library for making Thunks at [vdom-thunk](https://github.com/Raynos/vdom-thunk).

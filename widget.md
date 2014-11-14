@@ -19,8 +19,8 @@ The function called when the widget is being removed from the dom.
 var Widget = function (){}
 Widget.prototype.type = "Widget"
 Widget.prototype.init = function(){}
-Widget.prototype.update = function(){}
-Widget.prototype.destroy = function(){}
+Widget.prototype.update = function(previous, domNode){}
+Widget.prototype.destroy = function(domNode){}
 ```
 
 ### Update Arguments
