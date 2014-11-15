@@ -81,8 +81,6 @@ foo = new VNode('div', { attributes: { id: 'foo' }})
 
 This can, however, cause some unexpected behavior, particularly if you are unfamiliar with the differences between setting an element property directly vs. setting it using an attribute. Refer to [Element](https://developer.mozilla.org/en-US/docs/Web/API/Element) and [HTMLElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement) for some common property behaviors.
 
-We have documented some of the differences below.
-
 #### properties.style vs properties.attributes.style
 `properties.style` expects an object, while `properties.attributes.style` expects a string.
 
