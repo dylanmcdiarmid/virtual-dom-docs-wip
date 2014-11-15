@@ -95,10 +95,8 @@ var update = function(nextNode) {
   currentNode = nextNode
 }
 
-module.exports = function() {
-  document.body.appendChild(rootNode)
-  setInterval(function(){
-    update(new VNode("div", null, [new OddCounterWidget()]))
-  }, 1000)
-}
+document.body.appendChild(rootNode)
+setInterval(function(){
+  update(new VNode("div", null, [new OddCounterWidget()]))
+}, 1000)
 ```
