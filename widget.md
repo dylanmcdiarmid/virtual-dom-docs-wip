@@ -42,11 +42,11 @@ The HTMLElement associated with the widget that will be removed
 This example demonstrates one way to pass local component state and use `init`, `update`, and `destroy` to create a widget that counts each time it tries to update, only showing the odd numbers.
 
 ```javascript
-diff = require("vtree/diff")
-patch = require("vdom/patch")
-VNode = require("vtree/vnode")
-VText = require("vtree/vtext")
-createElement = require("vdom/create-element")
+diff = require("virtual-dom/vtree/diff")
+patch = require("virtual-dom/vdom/patch")
+VNode = require("virtual-dom/vtree/vnode")
+VText = require("virtual-dom/vtree/vtext")
+createElement = require("virtual-dom/vdom/create-element")
 
 var OddCounterWidget = function() {}
 OddCounterWidget.prototype.type = "Widget"
@@ -66,12 +66,9 @@ OddCounterWidget.prototype.update = function(previous, domNode) {
   this.count = previous.count + 1
   // Only re-render if the current count is odd
   if (this.count % 2) {
-    // When using widgets and updating, you are responsible for the relevant
-    // dom manipulation. The second argument passed to update is the previous
-    // dom node associated with the widget.
-    var newNode = this.init()
-    domNode.parentNode.replaceChild(newNode, domNode)
-    return newNode
+    // Returning a new element from widget#update
+    // will replace the previous node
+    return this.init()
   }
   return null
 }
@@ -84,8 +81,7 @@ OddCounterWidget.prototype.destroy = function(domNode) {
 }
 
 var myCounter = new OddCounterWidget()
-var containerNode = new VNode("div", null, [myCounter])
-var currentNode = containerNode
+var currentNode = myCounter
 var rootNode = createElement(currentNode)
 
 // A simple function to diff your widgets, and patch the dom
@@ -97,6 +93,6 @@ var update = function(nextNode) {
 
 document.body.appendChild(rootNode)
 setInterval(function(){
-  update(new VNode("div", null, [new OddCounterWidget()]))
+  update(new OddCounterWidget())
 }, 1000)
 ```
