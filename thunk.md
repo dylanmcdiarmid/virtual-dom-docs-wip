@@ -119,7 +119,7 @@ var rootNode = createElement(currentNode)
 // A simple function to diff your thunks, and patch the dom
 var update = function(nextNode) {
   var patches = diff(currentNode, nextNode)
-  patch(rootNode, patches)
+  rootNode = patch(rootNode, patches)
   currentNode = nextNode
 }
 
