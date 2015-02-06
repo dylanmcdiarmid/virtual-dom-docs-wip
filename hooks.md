@@ -7,13 +7,13 @@ var Hook = function(){}
 Hook.prototype.hook = function(node, propertyName, previousValue) { 
   console.log("Hello, World")
 }
-createElement(new VNode('div', { "my-hook": new Hook() }))
+createElement(h('div', { "my-hook": new Hook() }))
 ```
 
 Won't Work
 ```javascript
 var hook = { hook: function(node, propertyName, previousvalue) { console.log("Hello, World") } }
-createElement(new VNode('div', { "my-hook": hook }))
+createElement(h('div', { "my-hook": hook }))
 ```
 
 ## Arguments
@@ -27,7 +27,7 @@ var Hook = function(){}
 Hook.prototype.hook = function(node, propertyName, previousValue) {
   console.log("type: ", node.constructor.name)
 }
-createElement(new VNode('div', { "my-hook": new Hook() }))
+createElement(h('div', { "my-hook": new Hook() }))
 // logs "type: HTMLDivElement"
 ```
 
@@ -39,7 +39,7 @@ var Hook = function(){}
 Hook.prototype.hook = function(node, propertyName, previousValue) { 
   console.log("name: " + propertyName)
 }
-createElement(new VNode('div', { "my-hook": new Hook() }))
+createElement(h('div', { "my-hook": new Hook() }))
 // logs "name: my-hook"
 ```
 
@@ -47,4 +47,4 @@ createElement(new VNode('div', { "my-hook": new Hook() }))
 If this node is having just its properties changed during a patch, it will receive the value that was previously assigned to the key. Otherwise, this argument will be undefined.
 
 ## Other Examples
-The template engine [virtual-hyperscript](https://github.com/Raynos/virtual-hyperscript) uses hooks for several things, including setting up events and returning focus to input elements after a render. You can view these hooks in the [virtual-hyperscript/hooks](https://github.com/Raynos/virtual-hyperscript/tree/master/hooks) folder.
+[virtual-hyperscript](https://github.com/Matt-Esch/virtual-dom/tree/master/virtual-hyperscript) uses hooks for several things, including setting up events and returning focus to input elements after a render. You can view these hooks in the [virtual-hyperscript/hooks](https://github.com/Matt-Esch/virtual-dom/tree/master/virtual-hyperscript/hooks) folder.
