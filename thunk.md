@@ -42,7 +42,7 @@ ConstantlyThunk.prototype.render = function(previous) {
   if (previous && previous.vnode) {
     return previous.vnode
   } else {
-    return new VNode('div', null, [new VText("Constantly "+ this.greeting)])
+    return h('div', ["Constantly "+ this.greeting])
   }
 }
 
@@ -63,11 +63,10 @@ Here we implement GenericThunk, a simplified version of Raynos' [immutable-thunk
 It takes a rendering function, a comparison function, and a state. When it's being diffed vs. another instance of GenericThunk, it will use the comparison function to look at the new state and old state, and decide if it's ok to update.
 
 ```javascript
-diff = require("vtree/diff")
-patch = require("vdom/patch")
-VNode = require("vtree/vnode")
-VText = require("vtree/vtext")
-createElement = require("vdom/create-element")
+var diff = require("virtual-dom").diff
+var patch = require("virtual-dom").patch
+var h = require("virtual-dom").h
+var createElement = require("virtual-dom").create
 // Our GenericThunk will take 3 arguments
 // renderFn is the function that will generate the VNode
 // cmpFn is the function that will be used to compare state to see if an update is necessary.
@@ -107,7 +106,7 @@ var titleCompare = function(previousState, currentState) {
 // the color has changed
 var titleRender = function(previousThunk, currentThunk) {
   var currentColor = currentThunk.state.color
-  return new VNode("h1", { style: {color: currentColor}}, [new VText("Hello, I'm a title colored " + currentColor)])
+  return h("h1", { style: {color: currentColor}}, ["Hello, I'm a title colored " + currentColor])
 }
 
 var GreenColoredThunk = new GenericThunk(titleRender, titleCompare, { color: "green"})
