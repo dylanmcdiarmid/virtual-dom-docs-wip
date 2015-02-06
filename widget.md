@@ -42,11 +42,10 @@ The HTMLElement associated with the widget that will be removed
 This example demonstrates one way to pass local component state and use `init`, `update`, and `destroy` to create a widget that counts each time it tries to update, only showing the odd numbers.
 
 ```javascript
-diff = require("virtual-dom/vtree/diff")
-patch = require("virtual-dom/vdom/patch")
-VNode = require("virtual-dom/vtree/vnode")
-VText = require("virtual-dom/vtree/vtext")
-createElement = require("virtual-dom/vdom/create-element")
+var diff = require("virtual-dom").diff
+var patch = require("virtual-dom").patch
+var h = require("virtual-dom").h
+var createElement = require("virtual-dom").create
 
 var OddCounterWidget = function() {}
 OddCounterWidget.prototype.type = "Widget"
@@ -54,8 +53,7 @@ OddCounterWidget.prototype.count = 1
 OddCounterWidget.prototype.init = function() {
   // With widgets, you can use any method you would like to generate the DOM Elements.
   // We could get the same result using:
-  // createElement = require("vdom/create-element")
-  // return createElement(new VNode("div", null, [new VText("Count is: " + this.count)]))
+  // return createElement(h("div", "Count is: " + this.count))
   var divElem = document.createElement("div")
   var textElem = document.createTextNode("Count is: " + this.count)
   divElem.appendChild(textElem)
