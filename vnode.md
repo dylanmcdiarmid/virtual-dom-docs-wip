@@ -1,8 +1,8 @@
 # VNode
 
-A VNode is a representation of a dom node. Most end users will probably have their VNodes generated through a templating language (such as [virtual-hyperscript](https://github.com/Raynos/virtual-hyperscript/)), but understanding the VNode interface can be useful.
+A VNode is a representation of a dom node. Most end users will probably have their VNodes generated through [virtual-hyperscript](https://github.com/Matt-Esch/virtual-dom/tree/master/virtual-hyperscript), but understanding the VNode interface can be useful.
 
-In virtual-dom, VNodes are turned from virtual nodes into real nodes with the createElement function. You can read the code at [vdom/create-element](https://github.com/Matt-Esch/vdom/blob/master/create-element.js)
+In virtual-dom, VNodes are turned from virtual nodes into real nodes with the createElement function. You can read the code at [vdom/create-element](https://github.com/Matt-Esch/virtual-dom/blob/master/vdom/create-element.js)
 
 ## Arguments
 
@@ -23,8 +23,8 @@ A string specifying the namespace uri to associate with the element. VNodes crea
 
 ### A full example
 ```javascript
-var VNode = require("vtree/vnode")
-var createElement = require("vdom/create-element")
+var VNode = require("virtual-dom/vnode/vnode")
+var createElement = require("virtual-dom").create
 
 var Hook = function(){}
 Hook.prototype.hook = function(elem, key, previousValue) {
