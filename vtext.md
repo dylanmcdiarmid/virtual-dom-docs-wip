@@ -1,15 +1,15 @@
 # VText
 VText is a representation of a Text node. 
 
-In virtual-dom, a VText is turned into an actual text node with the `createElement` function. You can read the code at [vdom/create-element](https://github.com/Matt-Esch/vdom/blob/master/create-element.js)
+In virtual-dom, a VText is turned into an actual text node with the `createElement` function. You can read the code at [vdom/create-element](https://github.com/Matt-Esch/virtual-dom/blob/master/vdom/create-element.js)
 
 `createElement` turns a VText into a Text node using [document#createTextNode](https://developer.mozilla.org/en-US/docs/Web/API/document.createTextNode). 
 
 ## Full Example
 ```javascript
-var createElement = require("vdom/create-element")
-var VNode = require("vtree/vnode")
-var VText = require("vtree/vtext")
+var createElement = require("virtual-dom").create
+var VNode = require("virtual-dom/vnode/vnode")
+var VText = require("virtual-dom/vnode/vtext")
 var myText = new VText("Hello, World")
 
 // Pass our VText as a child of our VNode
