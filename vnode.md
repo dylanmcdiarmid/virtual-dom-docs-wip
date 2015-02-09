@@ -60,7 +60,7 @@ Keys in properties have several special cases.
 Everything in the `properties.attributes` object will be set on the rendered dom node using `Element#setAttribute(key, value)`, and removed using `Element#removeAttribute`. Refer to [MDN HTML Attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes) for available attributes. 
 
 #### Hook Objects
-Any key whose value is an object with an inherited key called "hook" is considered a hook. Hooks are used to run functions at render time. Refer to the [hook documentation](https://github.com/littleloops/virtual-dom-docs-wip/blob/master/README.md) for more information.
+Any key whose value is an object with an inherited key called "hook" is considered a hook. Hooks are used to run functions at render time. Refer to the [hook documentation](hooks.md) for more information.
 
 #### Other Objects
 Any key in `properties` that is an object, but whose value isn't a hook and isn't in the attributes key, will set the rendered elements property to the given object.

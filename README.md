@@ -14,14 +14,12 @@ Newcomers should start by reading the VNode and VText documentation, as virtual 
 
 ## Contents
 
-[VNode](https://github.com/littleloops/virtual-dom-docs-wip/blob/master/vnode.md) - A representation of a DOM element
+[VNode](vnode.md) - A representation of a DOM element
 
-[VText](https://github.com/littleloops/virtual-dom-docs-wip/blob/master/vtext.md) - A representation of a text node
+[VText](vtext.md) - A representation of a text node
 
-[h](https://github.com/littleloops/virtual-dom-docs-wip/blob/master/virtual-hyperscript.md) (virtual-hyperscript) - A concise way to generate VNode and VText
+[Hooks](hooks.md) - The mechanism for executing functions after a new node has been created
 
-[Hooks](https://github.com/littleloops/virtual-dom-docs-wip/blob/master/hooks.md) - The mechanism for executing functions after a new node has been created
+[Thunk](thunk.md) - The mechanism for taking control of diffing a specific DOM sub-tree
 
-[Thunk](https://github.com/littleloops/virtual-dom-docs-wip/blob/master/thunk.md) - The mechanism for taking control of diffing a specific DOM sub-tree
-
-[Widget](https://github.com/littleloops/virtual-dom-docs-wip/blob/master/widget.md) - The mechanism for taking control of node patching: DOM Element creation, updating, and removal.
+[Widget](widget.md) - The mechanism for taking control of node patching: DOM Element creation, updating, and removal.
